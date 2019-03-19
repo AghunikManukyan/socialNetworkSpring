@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<div>
+    <h3 th:text="${user.name}"></h3>
+    <h3 th:text="${user.surname}"></h3>
+</div>
+<br>
+<a href="/logout">Logout</a>
+
+<hr>
+<br>
+<h3>ALL USERS</h3>
+<table border="1">
+    <tr>
+        <td>Name</td>
+        <td>Surname</td>
+        <td>Send Friend Request</td>
+
+    </tr>
+    <tr th:each="user : ${users}">
+
+
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.surname}"></td>
+        <td><a th:href="@{/request(id=${user.id})}"> SendRequest </a></td>
+
+
+    </tr>
+</table>
+<hr>
+<h3>ALL REQUESTS</h3>
+<table border="1" >
+    <tr>
+
+        <td>Name</td>
+        <td>Surname</td>
+        <td>Accept or Reject</td>
+
+    </tr>
+    <tr th:each="req : ${requests}">
+
+        <td th:text="${req.name}"></td>
+        <td th:text="${req.surname}"></td>
+        <td><a th:href="@{/acceptOrReject(id=${req.id},action='accept')}"> Accept </a>&nbsp; | &nbsp;
+            <a th:href="@{/acceptOrReject(id=${req.id},action='reject')}"> Reject </a></td>
+
+
+    </tr>
+</table>
+<hr>
+<h3>ALL FRIENDS</h3>
+<table border="1">
+    <tr>
+
+        <td>Name</td>
+        <td>Surname</td>
+        <td>Delete Friend</td>
+
+    </tr>
+    <tr th:each="friend : ${friends}">
+
+
+        <td th:text="${friend.name}"></td>
+        <td th:text="${friend.surname}"></td>
+        <td><a th:href="@{/remove(id=${friend.id})}"> Delete </a></td>
+        <td><a th:href="@{/message(id=${friend.id})}"> Message </a></td>
+
+
+    </tr>
+</table>
+</body>
+</html>
