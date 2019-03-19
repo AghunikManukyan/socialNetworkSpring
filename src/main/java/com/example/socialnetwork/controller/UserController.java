@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -21,32 +22,52 @@ public class UserController {
     private UserRepository userRepository;
 
 
-
     @GetMapping("/home")
     public String request(@AuthenticationPrincipal
                                   SpringUser springUser, ModelMap map) {
         List<Integer> allFriendRequests = userRepository.findAllFriendRequests(springUser.getUser().getId());
         List<Integer> allFriends = userRepository.findAllFriends(springUser.getUser().getId());
-        List<Integer> all =allFriends;
+        List<Integer> all = allFriends;
         all.addAll(userRepository.findAllFriendsSecond(springUser.getUser().getId()));
         List<User> allById = userRepository.findAllById(allFriendRequests);
         List<User> allFriend = userRepository.findAllById(all);
         List<User> allUsers = userRepository.findAll();
+        allUsers.remove(springUser.getUser());
+
+        for (User allUser : allUsers) {
+            for (User user : allById) {
+                if (user.getId() == allUser.getId()) {
+                    allUsers.remove(allUser);
+                }
+
+            }
+        }
+        if (allFriend.size() != 0) {
+            for (User allUs : allUsers) {
+                for (User user : allFriend) {
+                    if (user.getId() != allUs.getId()) {
+                        allUsers.remove(allUs);
+                    }
+                }
+            }
+        }
 
 
         map.addAttribute("user", springUser.getUser());
-        map.addAttribute("users",allUsers);
+        map.addAttribute("users", allUsers);
         map.addAttribute("requests", allById);
         map.addAttribute("friends", allFriend);
         return "home";
 
     }
+
     @GetMapping("/remove")
     public String deleteFriend(@RequestParam("id") int id, @AuthenticationPrincipal SpringUser springUser) {
         userRepository.deleteFriendById(id, springUser.getUser().getId());
         userRepository.deleteUserFriendById(id, springUser.getUser().getId());
         return "redirect:/home";
     }
+
     @GetMapping("/request")
     public String request(@RequestParam("id") int id, @AuthenticationPrincipal SpringUser springUser) {
         User oneUser = userRepository.getOne(id);

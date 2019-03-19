@@ -32,16 +32,15 @@ public class MessageController {
         messages.addAll(messageRepository.findAllMessagesByFriendId(id));
         user = userRepository.getOne(id);
         modelMap.addAttribute("messages", messages);
-        modelMap.addAttribute("toId", user);
         return "message";
     }
 
     @PostMapping("/message")
-    public String message(@ModelAttribute Message message, @AuthenticationPrincipal SpringUser springUser, RedirectAttributes redirectAttributes) {
-        message.setUser(springUser.getUser());
-        message.setFriend(user);
-        message.setDate(new Date());
-        messageRepository.save(message);
+    public String message(@ModelAttribute Message mess, @AuthenticationPrincipal SpringUser springUser, RedirectAttributes redirectAttributes) {
+        mess.setUser(springUser.getUser());
+        mess.setFriend(user);
+        mess.setDate(new Date());
+        messageRepository.save(mess);
         redirectAttributes.addAttribute("id",user.getId());
         return "redirect:/message";
     }

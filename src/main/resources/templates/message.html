@@ -7,7 +7,7 @@
 </head>
 <body>
 <a href="/home">Home</a>
-<div th:each="message:${messages}">
+<div th:each="message : ${messages}">
     <h2 th:text="'From: ' + ${message.user.name} + ' To: ' + ${message.friend.name}"></h2>
     <p th:text="${message.message}"></p>
     <h4 th:text="${message.date}"></h4>
@@ -15,7 +15,7 @@
 </div>
 
 <form action="/message" method="post">
-    <input type="text" name="text" placeholder="Message">
+    <input type="text" name="message" placeholder="Message">
     <input type="submit" value="Add">
 </form>
 </body>

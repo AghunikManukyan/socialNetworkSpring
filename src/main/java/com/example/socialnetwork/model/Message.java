@@ -28,7 +28,6 @@ public class Message {
     private String message;
     @Column(name = "send_date")
     private Date date;
-    @Column
-    private String file;
+
 
     }
