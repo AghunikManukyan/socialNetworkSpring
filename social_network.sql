@@ -2,7 +2,7 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.18-log : Database - social_network
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -27,7 +27,9 @@ CREATE TABLE `friend_request` (
   KEY `to_id` (`to_id`),
   CONSTRAINT `friend_request_ibfk_1` FOREIGN KEY (`to_id`) REFERENCES `user` (`id`),
   CONSTRAINT `friend_request_ibfk_2` FOREIGN KEY (`from_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+/*Data for the table `friend_request` */
 
 /*Table structure for table `message` */
 
@@ -37,15 +39,19 @@ CREATE TABLE `message` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_id` int(11) NOT NULL,
   `to_id` int(11) NOT NULL,
-  `message` text NOT NULL,
+  `message` varchar(255) NOT NULL,
   `send_date` datetime NOT NULL,
-  `file` varchar(255) NOT NULL,
+  `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`from_id`,`to_id`),
   KEY `from_id` (`from_id`),
   KEY `to_id` (`to_id`),
-  CONSTRAINT `message_ibfk_2` FOREIGN KEY (`from_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `message_ibfk_3` FOREIGN KEY (`to_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`from_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `message_ibfk_2` FOREIGN KEY (`to_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+/*Data for the table `message` */
+
+insert  into `message`(`id`,`from_id`,`to_id`,`message`,`send_date`,`text`) values (1,8,9,'barev','2019-03-20 07:41:15',NULL),(2,9,8,'reagareg','2019-03-20 10:51:18',NULL);
 
 /*Table structure for table `user` */
 
@@ -57,9 +63,13 @@ CREATE TABLE `user` (
   `surname` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `pic_url` varchar(255) NOT NULL,
+  `user_type` enum('USER','ADMIN') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+/*Data for the table `user` */
+
+insert  into `user`(`id`,`name`,`surname`,`email`,`password`,`user_type`) values (8,'Poxos','Poxosyan','Poxos@mail.ru','$2a$10$EGkna2YXg3ChzMsuTu30WOKYcP7Eq6pd86EIRPMPptwYSXlSy0rym','USER'),(9,'Petros','Petrosyan','Petros@mail.ru','$2a$10$M0MV0RhKWQ66qDwdskldj.UeJaDk2BaOVW.zgIZ54rdEQYIHpOJwS','USER');
 
 /*Table structure for table `user_friend` */
 
@@ -72,7 +82,11 @@ CREATE TABLE `user_friend` (
   KEY `friend_id` (`friend_id`),
   CONSTRAINT `user_friend_ibfk_2` FOREIGN KEY (`friend_id`) REFERENCES `user` (`id`),
   CONSTRAINT `user_friend_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+/*Data for the table `user_friend` */
+
+insert  into `user_friend`(`user_id`,`friend_id`) values (8,9);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
