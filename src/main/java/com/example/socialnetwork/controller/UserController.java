@@ -11,7 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -34,23 +33,8 @@ public class UserController {
         List<User> allUsers = userRepository.findAll();
         allUsers.remove(springUser.getUser());
 
-        for (User allUser : allUsers) {
-            for (User user : allById) {
-                if (user.getId() == allUser.getId()) {
-                    allUsers.remove(allUser);
-                }
-
-            }
-        }
-        if (allFriend.size() != 0) {
-            for (User allUs : allUsers) {
-                for (User user : allFriend) {
-                    if (user.getId() != allUs.getId()) {
-                        allUsers.remove(allUs);
-                    }
-                }
-            }
-        }
+        allUsers.removeAll(allById);
+        allUsers.removeAll(allFriend);
 
 
         map.addAttribute("user", springUser.getUser());
