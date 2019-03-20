@@ -17,17 +17,18 @@ import java.util.Date;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column
+    private int id;
+    @Column
+    private String message;
+    @Column(name = "send_date")
+    private Date date;
     @ManyToOne
     @JoinColumn(name = "from_id")
     private User user;
     @ManyToOne
     @JoinColumn(name = "to_id")
     private User friend;
-    @Column(columnDefinition = "text")
-    private String message;
-    @Column(name = "send_date")
-    private Date date;
 
 
     }

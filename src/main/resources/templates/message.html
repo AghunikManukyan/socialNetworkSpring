@@ -7,14 +7,15 @@
 </head>
 <body>
 <a href="/home">Home</a>
+<hr>
 <div th:each="message : ${messages}">
     <h2 th:text="'From: ' + ${message.user.name} + ' To: ' + ${message.friend.name}"></h2>
     <p th:text="${message.message}"></p>
-    <h4 th:text="${message.date}"></h4>
+    <h4 th:text="${message.date}"></h4><a th:href="@{/removeMessage(id=${message.id})}"> Delete </a>
     <hr>
 </div>
 
-<form action="/message" method="post">
+<form action="/sendMessage" method="post">
     <input type="text" name="message" placeholder="Message">
     <input type="submit" value="Add">
 </form>

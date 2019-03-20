@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Date;
 import java.util.List;
 
+
 @Controller
 public class MessageController {
     @Autowired
@@ -27,21 +28,31 @@ public class MessageController {
     private User user;
 
     @GetMapping("/message")
-    public String messagePage(@RequestParam("id") int id, ModelMap modelMap) {
+    public String message(@RequestParam("id") int id, ModelMap modelMap) {
         List<Message> messages = messageRepository.findAllMessagesById(id);
         messages.addAll(messageRepository.findAllMessagesByFriendId(id));
         user = userRepository.getOne(id);
         modelMap.addAttribute("messages", messages);
+
         return "message";
     }
 
-    @PostMapping("/message")
-    public String message(@ModelAttribute Message mess, @AuthenticationPrincipal SpringUser springUser, RedirectAttributes redirectAttributes) {
-        mess.setUser(springUser.getUser());
-        mess.setFriend(user);
-        mess.setDate(new Date());
-        messageRepository.save(mess);
-        redirectAttributes.addAttribute("id",user.getId());
+    @PostMapping("/sendMessage")
+    public String messages(@RequestParam("message") String mess, @AuthenticationPrincipal SpringUser springUser, RedirectAttributes redirectAttributes) {
+        Message message = new Message();
+        message.setUser(springUser.getUser());
+        message.setFriend(user);
+        message.setDate(new Date());
+        message.setMessage(mess);
+        messageRepository.save(message);
+        redirectAttributes.addAttribute("id", user.getId());
+        return "redirect:/message";
+    }
+
+    @GetMapping("/removeMessage")
+    public String remove(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        messageRepository.delete(messageRepository.getOne(id));
+        redirectAttributes.addAttribute("id", user.getId());
         return "redirect:/message";
     }
 }
