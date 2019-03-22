@@ -3,6 +3,7 @@ package com.example.socialnetwork.controller;
 
 import com.example.socialnetwork.model.User;
 import com.example.socialnetwork.repository.UserRepository;
+import com.example.socialnetwork.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ public class MainController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/")
     public String main(){
@@ -38,6 +42,9 @@ public class MainController {
     public String register(@ModelAttribute User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        emailService.sendSimpleMessage(user.getEmail(),
+                "Շնորհակալություն " + user.getName(),
+                "Դուք գրանցվել եք մեր կայքում, հաստատելու համար բացեք այս հղումը։");
         return "login";
     }
 
